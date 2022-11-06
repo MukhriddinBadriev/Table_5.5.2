@@ -7,34 +7,38 @@ public:
         if (_cols <= 0 || _rows <= 0) {
             throw std::exception("Wrong index");
         }
-        else {
-            cols = _cols;
+        else {            
             rows = _rows;
-            array = new T * [_cols];
-            for (int i = 0; i < rows; i++) {
-                array[i] = new T[_rows];
+            cols = _cols;
+            array = new T * [_rows];
+            for (int i = 0; i < _rows; i++) {
+                array[i] = new T[_cols];
             }
         }
     }
     ~table() {
-        delete[]*array;
+        for (int i = 0; i < rows; i++) {
+            delete[] array[i];
+        }
+        delete[]array;
     }
 
-    table<T>& operator[](int index) const {
+    T* operator[](int index) const {
         return array[index];
     }
 
-    table<T>& operator[](int _index) {
-        return &array[_index];
+    T* operator[](int _index) {
+        return array[_index];
     }
+    
 
-    int Size(table& mas) {
-        return mas.cols * mas.rows;
+    int Size() {
+        return rows*cols;
     }
 
 private:
-    int cols = 0;
     int rows = 0;
+    int cols = 0;
     T** array = nullptr;
 };
 int main()
@@ -43,7 +47,6 @@ int main()
         auto test = table<int>(2, 3);
         test[0][0] = 4;
         std::cout << test[0][0];
-        
     }
     catch (std::exception& e) {
         std::cout << e.what();

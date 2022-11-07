@@ -23,6 +23,11 @@ public:
         delete[]array;
     }
 
+    table(const table& other):table(other.array){} 
+    table& operator=(const table& other) {
+        return *this = other.array;
+    }
+
     T* operator[](int index) const {
         return array[index];
     }
@@ -47,6 +52,7 @@ int main()
         auto test = table<int>(2, 3);
         test[0][0] = 4;
         std::cout << test[0][0];
+        auto& test2 = test;
     }
     catch (std::exception& e) {
         std::cout << e.what();

@@ -23,9 +23,27 @@ public:
         delete[]array;
     }
 
-    table(const table& other):table(other.array){} 
+    table(const table& other){
+        *this = other;
+    }
+
     table& operator=(const table& other) {
-        return *this = other.array;
+
+        for (int i = 0; i < rows; i++) {
+            delete[] array[i];
+        }
+        delete[]array;
+
+        if (other.array == nullptr) {
+            array = nullptr;
+        }
+        else {
+            array = new T*[other.rows];
+            for (int i = 0; i < other.rows; i++) {
+                array[i] = new T[other.cols];
+            }
+        }
+        return *this;
     }
 
     T* operator[](int index) const {
@@ -52,7 +70,7 @@ int main()
         auto test = table<int>(2, 3);
         test[0][0] = 4;
         std::cout << test[0][0];
-        auto& test2 = test;
+        auto test2 = test;
     }
     catch (std::exception& e) {
         std::cout << e.what();

@@ -28,19 +28,24 @@ public:
     }
 
     table& operator=(const table& other) {
+        if (&other != this) {
+            for (int i = 0; i < rows; i++) {
+                delete[] array[i];
+            }
+            delete[]array;
 
-        for (int i = 0; i < rows; i++) {
-            delete[] array[i];
-        }
-        delete[]array;
+            if (other.array == nullptr) {
+                array = nullptr;
+            }
+            else {
+                array = new T * [other.rows];
+                for (int i = 0; i < other.rows; i++) {
+                    array[i] = new T[other.cols];
+                    for (int j = 0; j < other.cols; j++) {
+                        array[i][j] = other.array[i][j];
+                    }
+                }
 
-        if (other.array == nullptr) {
-            array = nullptr;
-        }
-        else {
-            array = new T*[other.rows];
-            for (int i = 0; i < other.rows; i++) {
-                array[i] = new T[other.cols];
             }
         }
         return *this;
@@ -69,8 +74,15 @@ int main()
     try {
         auto test = table<int>(2, 3);
         test[0][0] = 4;
+        std::cout << test[0][0]<<'\n';
+        
+        auto& test2 = test;
+        std::cout << test2[0][0] << '\n';
+
+        test2[0][0] = 8;
+        test = test2;
         std::cout << test[0][0];
-        auto test2 = test;
+        
     }
     catch (std::exception& e) {
         std::cout << e.what();

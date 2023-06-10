@@ -7,7 +7,7 @@ public:
         if (_cols <= 0 || _rows <= 0) {
             throw std::exception("Wrong index");
         }
-        else {            
+        else {
             rows = _rows;
             cols = _cols;
             array = new T * [_rows];
@@ -38,10 +38,12 @@ public:
                 array = nullptr;
             }
             else {
-                array = new T * [other.rows];
-                for (int i = 0; i < other.rows; i++) {
-                    array[i] = new T[other.cols];
-                    for (int j = 0; j < other.cols; j++) {
+                rows = other.rows;
+                cols = other.cols;
+                array = new T * [rows];
+                for (int i = 0; i < rows; i++) {
+                    array[i] = new T[cols];
+                    for (int j = 0; j < cols; j++) {
                         array[i][j] = other.array[i][j];
                     }
                 }
@@ -74,14 +76,20 @@ int main()
     try {
         auto test = table<int>(2, 3);
         test[0][0] = 4;
-        std::cout << test[0][0]<<'\n';
+        std::cout << test[0][0] << '\n';
         
         auto& test2 = test;
         std::cout << test2[0][0] << '\n';
 
         test2[0][0] = 8;
         test = test2;
-        std::cout << test[0][0];
+        std::cout << test[0][0] << '\n';
+
+        auto test3 = table<int>(10, 10);
+        auto test4 = table<int>(2, 3);
+        test4 = test3;
+
+        std::cout << test4.Size();
         
     }
     catch (std::exception& e) {
